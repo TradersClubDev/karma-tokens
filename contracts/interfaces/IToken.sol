@@ -8,8 +8,7 @@ interface IToken is IBEP20 {
 
     struct Taxes {
         uint256 marketing;
-        uint256 liquidity;
-        uint256 devOrReflection;
+        uint256 reflection;
     }
 
     struct TokenData {
@@ -24,8 +23,8 @@ interface IToken is IBEP20 {
         Taxes buyTax;
         Taxes sellTax;
         address marketingWallet;
-        address devWallet;
         address rewardToken;
+        address antiBot;
     }
 
     function initialize(TokenData memory tokenData) external;
