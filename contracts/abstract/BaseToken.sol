@@ -14,6 +14,8 @@ import "../ERC1363/ERC1363.sol";
 import "../interfaces/IKARMAAntiBot.sol";
 import "./LimitedOwner.sol";
 
+// import "hardhat/console.sol";
+
 interface IFactory {
 	function createPair(
 		address tokenA,
@@ -99,8 +101,6 @@ abstract contract BaseToken is
 
 		deployer = _msgSender();
 
-		transferLimitedOwner(limitedOwner);
-
 		super.__ERC20_init(name, symbol);
 		super.__Ownable_init_unchained();
 		// super.__ERC20Capped_init_unchained(supply);
@@ -109,6 +109,7 @@ abstract contract BaseToken is
 		_decimals = decim;
 
 		_mint(_msgSender(), supply);
+		transferLimitedOwner(limitedOwner);
 	}
 
 	function decimals()
