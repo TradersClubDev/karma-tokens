@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "./BaseToken.sol";
+import "./abstract/BaseToken.sol";
 
 pragma solidity ^0.8.0;
 pragma abicoder v2;
@@ -70,5 +70,4 @@ contract Token is BaseToken {
 
 		super._transfer(sender, recipient, amount);
 	}
-
 }

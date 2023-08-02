@@ -1,15 +1,13 @@
 //SPDX-License-Identifier: BUSL-1.1
 
-import "./BaseToken.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
+import "./abstract/BaseToken.sol";
 
 pragma solidity ^0.8.0;
 pragma abicoder v2;
 
 contract StandardToken is BaseToken {
-	using AddressUpgradeable for address payable;
 	using SafeMathUpgradeable for uint256;
-	using SafeERC20Upgradeable for IERC20Upgradeable;
+	using AddressUpgradeable for address payable;
 
 	mapping(address => uint256) private _balances;
 
@@ -17,7 +15,6 @@ contract StandardToken is BaseToken {
 	bool public swapEnabled;
 
 	uint256 public swapThreshold;
-
 
 	address public marketingWallet;
 	address public devWallet;
@@ -168,13 +165,15 @@ contract StandardToken is BaseToken {
 	function setTaxes(uint256 _buy, uint256 _sell) external onlyLimitedOrOwner {
 		require(_buy <= 150, "Buy > 15%");
 		require(_sell <= 150, "Sell > 15%");
-		require((_buy < buyTax && msg.sender == limitedOwner()) || 
-			msg.sender == karmaDeployer && owner() == karmaDeployer,
-			"Only Karma deployer"
+		require(
+			(_buy < buyTax && msg.sender == limitedOwner()) ||
+				(msg.sender == karmaDeployer && owner() == karmaDeployer),
+			"Only Karma deployer can increase buy taxes"
 		);
-		require((_sell < sellTax && msg.sender == limitedOwner()) || 
-			msg.sender == karmaDeployer && owner() == karmaDeployer,
-			"Only Karma deployer"
+		require(
+			(_sell < sellTax && msg.sender == limitedOwner()) ||
+				(msg.sender == karmaDeployer && owner() == karmaDeployer),
+			"Only Karma deployer can increase sell taxes"
 		);
 		buyTax = _buy;
 		sellTax = _sell;

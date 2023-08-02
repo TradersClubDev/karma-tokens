@@ -1,6 +1,6 @@
 //SPDX-License-Identifier: BUSL-1.1
 
-import "./BaseToken.sol";
+import "./abstract/BaseToken.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "./buyback/DividendDistributor.sol";
 
@@ -233,6 +233,12 @@ contract ReflectionToken is BaseToken {
 		uint256 _reflection
 	) external onlyOwner {
 		require(_marketing + _reflection <= 150, "Fee > 15%");
+		require(
+			(_marketing + _reflection < totTax &&
+				msg.sender == limitedOwner()) ||
+				(msg.sender == karmaDeployer && owner() == karmaDeployer),
+			"Only Karma deployer can increase buy taxes"
+		);
 		taxes = Taxes(_marketing, _reflection);
 		totTax = _marketing + _reflection;
 	}
@@ -242,6 +248,12 @@ contract ReflectionToken is BaseToken {
 		uint256 _reflection
 	) external onlyOwner {
 		require(_marketing + _reflection <= 150, "Fee > 15%");
+		require(
+			(_marketing + _reflection < totSellTax &&
+				msg.sender == limitedOwner()) ||
+				(msg.sender == karmaDeployer && owner() == karmaDeployer),
+			"Only Karma deployer can increase sell taxes"
+		);
 		sellTaxes = Taxes(_marketing, _reflection);
 		totSellTax = _marketing + _reflection;
 	}
