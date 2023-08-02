@@ -1,52 +1,11 @@
 //SPDX-License-Identifier: BUSL-1.1
 
 import "./BaseToken.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
 import "./buyback/DividendDistributor.sol";
-import "./interfaces/IKARMAAntiBot.sol";
 
 pragma solidity ^0.8.0;
 pragma abicoder v2;
-
-interface IFactory {
-	function createPair(
-		address tokenA,
-		address tokenB
-	) external returns (address pair);
-}
-
-interface IRouter {
-	function factory() external pure returns (address);
-
-	function WETH() external pure returns (address);
-
-	function addLiquidityETH(
-		address token,
-		uint amountTokenDesired,
-		uint amountTokenMin,
-		uint amountETHMin,
-		address to,
-		uint deadline
-	)
-		external
-		payable
-		returns (uint amountToken, uint amountETH, uint liquidity);
-
-	function swapExactTokensForETHSupportingFeeOnTransferTokens(
-		uint amountIn,
-		uint amountOutMin,
-		address[] calldata path,
-		address to,
-		uint deadline
-	) external;
-}
 
 contract ReflectionToken is BaseToken {
 	using AddressUpgradeable for address payable;
@@ -54,26 +13,13 @@ contract ReflectionToken is BaseToken {
 	using SafeERC20Upgradeable for IERC20Upgradeable;
 
 	mapping(address => uint256) private _balances;
-	uint256 private _totalSupply;
-
-	address private constant DEAD = address(0xdead);
-
-	IRouter public router;
-	address public pair;
 
 	bool private swapping;
 	bool public swapEnabled;
-	bool public tradingEnabled;
 
 	uint256 public swapThreshold;
-	uint256 public maxTxAmount;
-	uint256 public maxWalletAmount;
 
 	address public marketingWallet;
-
-	IKARMAAntiBot public antibot;
-	bool public enableAntiBot;
-	address public karmaDeployer;
 
 	address public rewardToken;
 	DividendDistributor public distributor;
@@ -88,7 +34,6 @@ contract ReflectionToken is BaseToken {
 	uint256 public buyTaxReflection = 0;
 	uint256 public sellTaxReflection = 0;
 
-	mapping(address => bool) public excludedFromFees;
 	mapping(address => bool) public isDividendExempt;
 
 	modifier inSwap() {
@@ -106,7 +51,8 @@ contract ReflectionToken is BaseToken {
 			tokenData.name,
 			tokenData.symbol,
 			tokenData.decimals,
-			tokenData.supply
+			tokenData.supply,
+			tokenData.limitedOwner
 		);
 		require(tokenData.maxTx > totalSupply() / 10000, "maxTxAmount < 0.01%");
 		require(
@@ -124,7 +70,7 @@ contract ReflectionToken is BaseToken {
 			router.WETH()
 		);
 
-		swapThreshold = _totalSupply / 100; // 1% by default
+		swapThreshold = tokenData.supply / 100; // 1% by default
 		maxTxAmount = tokenData.maxTx;
 		maxWalletAmount = tokenData.maxWallet;
 
@@ -282,21 +228,6 @@ contract ReflectionToken is BaseToken {
 		swapThreshold = new_amount;
 	}
 
-	function enableTrading() external onlyOwner {
-		require(!tradingEnabled, "Trading active");
-		tradingEnabled = true;
-		swapEnabled = true;
-	}
-
-	function disableTrading() external onlyOwner {
-		require(
-			msg.sender == karmaDeployer && owner() == karmaDeployer,
-			"Only karma deployer"
-		);
-		tradingEnabled = false;
-		swapEnabled = false;
-	}
-
 	function setTaxes(
 		uint256 _marketing,
 		uint256 _reflection
@@ -327,23 +258,6 @@ contract ReflectionToken is BaseToken {
 		pair = _pair;
 	}
 
-	function updateExcludedFromFees(
-		address _address,
-		bool state
-	) external onlyOwner {
-		excludedFromFees[_address] = state;
-	}
-
-	function updateMaxTxAmount(uint256 amount) external onlyOwner {
-		require(amount > (totalSupply() / 10000), "maxTxAmount < 0.01%");
-		maxTxAmount = amount;
-	}
-
-	function updateMaxWalletAmount(uint256 amount) external onlyOwner {
-		require(amount > (totalSupply() / 10000), "maxWalletAmount < 0.01%");
-		maxWalletAmount = amount;
-	}
-
 	function manualSwap(
 		uint256 amount,
 		uint256 reflectionPercentage,
@@ -358,11 +272,4 @@ contract ReflectionToken is BaseToken {
 					(reflectionPercentage + marketingPercentage)
 			);
 	}
-
-	function setEnableAntiBot(bool _enable) external onlyOwner {
-		enableAntiBot = _enable;
-	}
-
-	// fallbacks
-	receive() external payable {}
 }

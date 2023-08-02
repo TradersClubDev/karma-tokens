@@ -25,6 +25,7 @@ interface IToken is IBEP20 {
         address marketingWallet;
         address rewardToken;
         address antiBot;
+        address limitedOwner;
     }
 
     function initialize(TokenData memory tokenData) external;

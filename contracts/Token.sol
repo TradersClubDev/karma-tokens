@@ -3,42 +3,11 @@
 pragma solidity ^0.8.0;
 
 import "./BaseToken.sol";
-import "./interfaces/IKARMAAntiBot.sol";
 
 pragma solidity ^0.8.0;
 pragma abicoder v2;
 
-interface IFactory {
-	function createPair(
-		address tokenA,
-		address tokenB
-	) external returns (address pair);
-}
-
-interface IRouter {
-	function factory() external pure returns (address);
-
-	function WETH() external pure returns (address);
-}
-
 contract Token is BaseToken {
-	address private constant DEAD = address(0xdead);
-
-	mapping(address => uint256) private _balances;
-	mapping(address => bool) public excludedFromFees;
-
-	IRouter public router;
-	address public pair;
-
-	bool public tradingEnabled;
-
-	uint256 public maxTxAmount;
-	uint256 public maxWalletAmount;
-
-	IKARMAAntiBot public antibot;
-	bool public enableAntiBot;
-	address public karmaDeployer;
-
 	function initialize(
 		TokenData calldata tokenData
 	) public virtual override initializer {
@@ -46,7 +15,8 @@ contract Token is BaseToken {
 			tokenData.name,
 			tokenData.symbol,
 			tokenData.decimals,
-			tokenData.supply
+			tokenData.supply,
+			tokenData.limitedOwner
 		);
 		require(tokenData.maxTx > totalSupply() / 10000, "maxTxAmount < 0.01%");
 		require(
@@ -101,41 +71,4 @@ contract Token is BaseToken {
 		super._transfer(sender, recipient, amount);
 	}
 
-	function updateExcludedFromFees(
-		address _address,
-		bool state
-	) external onlyOwner {
-		excludedFromFees[_address] = state;
-	}
-
-	function updateMaxTxAmount(uint256 amount) external onlyOwner {
-		require(amount > (totalSupply() / 10000), "maxTxAmount < 0.01%");
-		maxTxAmount = amount;
-	}
-
-	function updateMaxWalletAmount(uint256 amount) external onlyOwner {
-		require(amount > (totalSupply() / 10000), "maxWalletAmount < 0.01%");
-		maxWalletAmount = amount;
-	}
-
-	function enableTrading() external onlyOwner {
-		require(!tradingEnabled, "Trading already active");
-
-		tradingEnabled = true;
-	}
-
-	function disableTrading() external onlyOwner {
-		require(
-			msg.sender == karmaDeployer && owner() == karmaDeployer,
-			"Only karma deployer"
-		);
-		tradingEnabled = false;
-	}
-
-	function setEnableAntiBot(bool _enable) external onlyOwner {
-		enableAntiBot = _enable;
-	}
-
-	// fallbacks
-	receive() external payable {}
 }
