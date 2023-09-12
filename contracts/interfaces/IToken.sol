@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import './IBEP20.sol';
+import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 
-interface IToken is IBEP20 {
+interface IToken is IERC20MetadataUpgradeable {
 
     struct Taxes {
         uint256 marketing;
@@ -29,4 +29,8 @@ interface IToken is IBEP20 {
     }
 
     function initialize(TokenData memory tokenData) external;
+
+    function updateExcludedFromFees(address _address, bool state) external;
+
+    function getOwner() external view returns (address);
 }

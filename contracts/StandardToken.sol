@@ -50,6 +50,8 @@ contract StandardToken is BaseToken {
 		excludedFromFees[msg.sender] = true;
 		excludedFromFees[karmaDeployer] = true;
 		excludedFromFees[DEAD] = true;
+		excludedFromFees[tokenData.routerAddress] = true;
+		excludedFromFees[tokenData.karmaDeployer] = true;
 
 		router = IRouter(tokenData.routerAddress);
 		pair = IFactory(router.factory()).createPair(

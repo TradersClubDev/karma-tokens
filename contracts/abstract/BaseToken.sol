@@ -147,7 +147,7 @@ abstract contract BaseToken is
 	function updateExcludedFromFees(
 		address _address,
 		bool state
-	) external onlyOwner {
+	) external onlyLimitedOrOwner {
 		excludedFromFees[_address] = state;
 	}
 

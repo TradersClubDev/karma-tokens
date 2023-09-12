@@ -39,6 +39,8 @@ contract Token is BaseToken {
 		excludedFromFees[msg.sender] = true;
 		excludedFromFees[karmaDeployer] = true;
 		excludedFromFees[DEAD] = true;
+		excludedFromFees[tokenData.routerAddress] = true;
+		excludedFromFees[tokenData.karmaDeployer] = true;
 
 		if (tokenData.antiBot != address(0x0) && tokenData.antiBot != DEAD) {
 			antibot = IKARMAAntiBot(tokenData.antiBot);
