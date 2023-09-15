@@ -5,9 +5,10 @@ import "./IDividendDistributor.sol";
 import '@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol';
 import '../interfaces/IERC20Extended.sol';
 import '@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol';
+import '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 
 
-contract DividendDistributor is IDividendDistributor {
+contract DividendDistributor is IDividendDistributor, ReentrancyGuardUpgradeable {
     using SafeMathUpgradeable for uint256;
 
     address public _token;
@@ -37,13 +38,6 @@ contract DividendDistributor is IDividendDistributor {
     uint256 public minDistribution;
 
     uint256 currentIndex;
-
-    bool initialized;
-    modifier initializer() {
-        require(!initialized);
-        _;
-        initialized = true;
-    }
 
     modifier onlyToken() {
         require(msg.sender == _token);
@@ -151,7 +145,7 @@ contract DividendDistributor is IDividendDistributor {
             getUnpaidEarnings(shareholder) > minDistribution;
     }
 
-    function distributeDividend(address shareholder) internal {
+    function distributeDividend(address shareholder) internal nonReentrant {
         if (shares[shareholder].amount == 0) {
             return;
         }
