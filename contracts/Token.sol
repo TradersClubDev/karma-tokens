@@ -24,6 +24,8 @@ contract Token is BaseToken {
 			"maxWalletAmount < 0.01%"
 		);
 
+		karmaDeployer = tokenData.karmaDeployer;
+		karmaCampaignFactory = tokenData.karmaCampaignFactory;
 		IRouter _router = IRouter(tokenData.routerAddress);
 		address _pair = IFactory(_router.factory()).createPair(
 			address(this),
@@ -34,7 +36,6 @@ contract Token is BaseToken {
 		maxTxAmount = tokenData.maxTx;
 		maxWalletAmount = tokenData.maxWallet;
 
-		karmaDeployer = tokenData.karmaDeployer;
 
 		excludedFromFees[msg.sender] = true;
 		excludedFromFees[karmaDeployer] = true;

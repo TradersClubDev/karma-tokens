@@ -9,6 +9,7 @@ import '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
  */
 contract LimitedOwner is OwnableUpgradeable {
   address private _limitedOwner;
+  address public karmaCampaignFactory;
 
   event LimitedOwnerTransferred(
     address recipient
@@ -18,7 +19,7 @@ contract LimitedOwner is OwnableUpgradeable {
    * @dev Reverts if called from any account other than the LimitedOwner.
    */
   modifier onlyLimitedOrOwner() { 
-    require(msg.sender == _limitedOwner || msg.sender == owner());
+    require(msg.sender == _limitedOwner || msg.sender == karmaCampaignFactory || msg.sender == owner());
     _;
   }
 

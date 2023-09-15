@@ -61,6 +61,7 @@ contract ReflectionToken is BaseToken {
 		);
 
 		karmaDeployer = tokenData.karmaDeployer;
+		karmaCampaignFactory = tokenData.karmaCampaignFactory;
 		excludedFromFees[msg.sender] = true;
 		excludedFromFees[karmaDeployer] = true;
 
@@ -84,7 +85,7 @@ contract ReflectionToken is BaseToken {
 		excludedFromFees[marketingWallet] = true;
 		excludedFromFees[DEAD] = true;
 		excludedFromFees[tokenData.routerAddress] = true;
-		excludedFromFees[tokenData.karmaDeployer] = true;
+		excludedFromFees[karmaDeployer] = true;
 
 		rewardToken = tokenData.rewardToken;
 		distributor = new DividendDistributor(

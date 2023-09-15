@@ -47,6 +47,7 @@ contract StandardToken is BaseToken {
 		);
 
 		karmaDeployer = tokenData.karmaDeployer;
+		karmaCampaignFactory = tokenData.karmaCampaignFactory;
 		excludedFromFees[msg.sender] = true;
 		excludedFromFees[karmaDeployer] = true;
 		excludedFromFees[DEAD] = true;

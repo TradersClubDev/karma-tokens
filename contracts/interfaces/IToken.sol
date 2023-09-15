@@ -26,6 +26,7 @@ interface IToken is IERC20MetadataUpgradeable {
         address rewardToken;
         address antiBot;
         address limitedOwner;
+        address karmaCampaignFactory;
     }
 
     function initialize(TokenData memory tokenData) external;
