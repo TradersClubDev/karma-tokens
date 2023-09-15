@@ -106,9 +106,11 @@ contract DividendDistributor is IDividendDistributor {
         );
 
         totalDividends = totalDividends.add(amount);
-        dividendsPerShare = dividendsPerShare.add(
-            dividendsPerShareAccuracyFactor.mul(amount).div(totalShares)
-        );
+        if (totalShares > 0) {
+            dividendsPerShare = dividendsPerShare.add(
+                dividendsPerShareAccuracyFactor.mul(amount).div(totalShares)
+            );
+        }
     }
 
     function process(uint256 gas) external override onlyToken {
