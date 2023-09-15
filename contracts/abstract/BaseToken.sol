@@ -105,7 +105,6 @@ abstract contract BaseToken is
 		super.__Ownable_init_unchained();
 		// super.__ERC20Capped_init_unchained(supply);
 		// super.__ERC20Burnable_init_unchained(true);
-		// super.__ERC2612_init_unchained(name);
 		_decimals = decim;
 
 		_mint(_msgSender(), supply);
