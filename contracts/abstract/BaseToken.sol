@@ -81,6 +81,8 @@ abstract contract BaseToken is
 
 	uint8 _decimals = 18;
 
+	uint256[50] __gap;
+
 	constructor() {
 		deployer = _msgSender();
 	}
