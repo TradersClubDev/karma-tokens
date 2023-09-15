@@ -79,7 +79,7 @@ abstract contract BaseToken is
 	bool public enableAntiBot;
 	address public karmaDeployer;
 
-	uint8 _decimals = 18;
+	uint8 _decimals;
 
 	uint256[50] __gap;
 
