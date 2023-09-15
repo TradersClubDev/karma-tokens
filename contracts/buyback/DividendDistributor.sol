@@ -84,7 +84,7 @@ contract DividendDistributor is IDividendDistributor, ReentrancyGuardUpgradeable
         );
     }
 
-    function deposit() external payable override onlyToken {
+    function deposit() external payable override {
         uint256 balanceBefore = rewardToken.balanceOf(address(this));
 
         address[] memory path = new address[](2);

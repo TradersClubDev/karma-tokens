@@ -181,6 +181,13 @@ contract ReflectionToken is BaseToken {
 		}
 	}
 
+    function setDistributionCriteria(
+        uint256 _minPeriod,
+        uint256 _minDistribution
+    ) external onlyOwner {
+		distributor.setDistributionCriteria(_minPeriod, _minDistribution);
+    }
+
 	function swapForFees() private inSwap {
 		uint256 contractBalance = balanceOf(address(this));
 		if (contractBalance >= swapThreshold && contractBalance > 0) {

@@ -114,6 +114,10 @@ describe("ReflectionToken", function () {
         { value: eth(1) },
       );
 
+      expect(
+        await tokenContract.setDistributionCriteria(1000, utils.parseUnits("1000", 18)),
+      ).to.not.revertedWithoutReason();
+
       expect((await tokenContract.balanceOf(owner.address)).toString()).to.equal("9871580343970612988504");
     });
 
