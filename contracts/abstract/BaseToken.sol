@@ -145,6 +145,12 @@ abstract contract BaseToken is
 		super._mint(account, amount);
 	}
 
+	function disableAntiBot(
+	) external onlyLimitedOrOwner {
+		require(enableAntiBot == true, "ALREADY_DISABLED");
+		enableAntiBot = false;
+	}
+
 	function updateExcludedFromFees(
 		address _address,
 		bool state
