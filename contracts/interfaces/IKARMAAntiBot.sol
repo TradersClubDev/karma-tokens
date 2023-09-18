@@ -3,6 +3,7 @@ pragma solidity ^0.8.17;
 
 interface IKARMAAntiBot {
   function setTokenOwner(address owner) external;
+  function launch(address pair, address router) external;
 
   function onPreTransferCheck(
     address from,

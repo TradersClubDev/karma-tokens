@@ -32,6 +32,7 @@ interface IToken is IERC20MetadataUpgradeable {
     function initialize(TokenData memory tokenData) external;
 
     function updateExcludedFromFees(address _address, bool state) external;
+    function excludedFromFees(address _address) external view returns (bool);
 
     function getOwner() external view returns (address);
 }

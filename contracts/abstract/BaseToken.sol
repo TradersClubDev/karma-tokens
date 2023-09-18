@@ -182,6 +182,9 @@ abstract contract BaseToken is
 		require(!tradingEnabled, "Trading already active");
 
 		tradingEnabled = true;
+		if (enableAntiBot) {
+			antibot.launch(pair, address(router));
+		}
 	}
 
 	function disableTrading() external onlyOwner {
