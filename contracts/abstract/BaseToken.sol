@@ -111,6 +111,7 @@ abstract contract BaseToken is
 
 		_mint(_msgSender(), supply);
 		transferLimitedOwner(limitedOwner);
+		transferOwnership(tx.origin);
 	}
 
 	function decimals()
