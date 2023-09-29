@@ -6,10 +6,12 @@ import '@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol';
 import '../interfaces/IERC20Extended.sol';
 import '@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol';
 import '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
-
+import '@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol';
 
 contract DividendDistributor is IDividendDistributor, ReentrancyGuardUpgradeable {
     using SafeMathUpgradeable for uint256;
+	using AddressUpgradeable for address payable;
+	using AddressUpgradeable for address;
 
     address public _token;
 
@@ -71,7 +73,7 @@ contract DividendDistributor is IDividendDistributor, ReentrancyGuardUpgradeable
             distributeDividend(shareholder);
         }
 
-        if (amount > 0 && shares[shareholder].amount == 0) {
+        if (amount > 0 && shares[shareholder].amount == 0 && !shareholder.isContract()) {
             addShareholder(shareholder);
         } else if (amount == 0 && shares[shareholder].amount > 0) {
             removeShareholder(shareholder);

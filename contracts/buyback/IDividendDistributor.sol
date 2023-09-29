@@ -13,4 +13,6 @@ interface IDividendDistributor {
     function deposit() external payable;
 
     function process(uint256 gas) external;
+    
+    function claimDividend() external;
 }

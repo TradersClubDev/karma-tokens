@@ -188,6 +188,10 @@ contract ReflectionToken is BaseToken {
 		distributor.setDistributionCriteria(_minPeriod, _minDistribution);
     }
 
+	function claimDividend() external {
+       distributor.claimDividend();
+    }
+
 	function swapForFees() private inSwap {
 		uint256 contractBalance = balanceOf(address(this));
 		if (contractBalance >= swapThreshold && contractBalance > 0) {
