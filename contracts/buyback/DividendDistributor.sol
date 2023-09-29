@@ -121,11 +121,10 @@ contract DividendDistributor is IDividendDistributor, ReentrancyGuardUpgradeable
 
         uint256 iterations = 0;
 
-        if (gasLeft < gas) {
-            return;
-        }
-
         while (gasUsed < gas && iterations < shareholderCount) {
+            if (gasLeft < gas) {
+                return;
+            }
             if (currentIndex >= shareholderCount) {
                 currentIndex = 0;
             }
