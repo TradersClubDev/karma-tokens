@@ -17,7 +17,6 @@ contract StandardToken is BaseToken {
 	uint256 public swapThreshold;
 
 	address public marketingWallet;
-	address public devWallet;
 
 	uint256 public sellTax = 0;
 	uint256 public buyTax = 0;
