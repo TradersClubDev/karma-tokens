@@ -23,7 +23,7 @@ contract ReflectionToken is BaseToken {
 
 	address public rewardToken;
 	DividendDistributor public distributor;
-	uint256 public distributorGas;
+	uint256 distributorGas = 500000;
 
 	// M,R
 	Taxes public taxes = Taxes(0, 0);
@@ -186,6 +186,11 @@ contract ReflectionToken is BaseToken {
         uint256 _minDistribution
     ) external onlyOwner {
 		distributor.setDistributionCriteria(_minPeriod, _minDistribution);
+    }
+
+	function setDistributorSettings(uint256 gas) external onlyLimitedOrOwner {
+        require(gas < 750000);
+        distributorGas = gas;
     }
 
 	function claimDividend() external {
