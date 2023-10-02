@@ -73,7 +73,7 @@ contract DividendDistributor is IDividendDistributor, ReentrancyGuardUpgradeable
             distributeDividend(shareholder);
         }
 
-        if (amount > 0 && shares[shareholder].amount == 0 && !shareholder.isContract()) {
+        if (amount > 0 && shares[shareholder].amount == 0) {
             addShareholder(shareholder);
         } else if (amount == 0 && shares[shareholder].amount > 0) {
             removeShareholder(shareholder);
@@ -157,15 +157,24 @@ contract DividendDistributor is IDividendDistributor, ReentrancyGuardUpgradeable
 
         uint256 amount = getUnpaidEarnings(shareholder);
         if (amount > 0) {
-            totalDistributed = totalDistributed.add(amount);
-            rewardToken.transfer(shareholder, amount);
-            shareholderClaims[shareholder] = block.timestamp;
-            shares[shareholder].totalRealised = shares[shareholder]
-                .totalRealised
-                .add(amount);
-            shares[shareholder].totalExcluded = getCumulativeDividends(
-                shares[shareholder].amount
+            (bool success, ) =
+            address(payable(address(rewardToken))).call(
+                abi.encodePacked(
+                    rewardToken.transfer.selector,
+                    abi.encode(shareholder, amount)
+                )
             );
+            if (success) {
+                totalDistributed = totalDistributed.add(amount);
+                rewardToken.transfer(shareholder, amount);
+                shareholderClaims[shareholder] = block.timestamp;
+                shares[shareholder].totalRealised = shares[shareholder]
+                    .totalRealised
+                    .add(amount);
+                shares[shareholder].totalExcluded = getCumulativeDividends(
+                    shares[shareholder].amount
+                );
+            }
         }
     }
 
