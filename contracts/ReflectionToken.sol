@@ -281,14 +281,6 @@ contract ReflectionToken is BaseToken {
 		marketingWallet = newWallet;
 	}
 
-	function updateRouterAndPair(
-		IRouter _router,
-		address _pair
-	) external onlyOwner {
-		router = _router;
-		pair = _pair;
-	}
-
 	function manualSwap(
 		uint256 amount,
 		uint256 reflectionPercentage,
