@@ -179,7 +179,7 @@ contract DividendDistributor is IDividendDistributor, ReentrancyGuardUpgradeable
     }
 
     function claimDividend() external {
-        distributeDividend(msg.sender);
+        distributeDividend(tx.origin);
     }
 
     function getUnpaidEarnings(address shareholder)
