@@ -166,7 +166,6 @@ contract DividendDistributor is IDividendDistributor, ReentrancyGuardUpgradeable
             );
             if (success) {
                 totalDistributed = totalDistributed.add(amount);
-                rewardToken.transfer(shareholder, amount);
                 shareholderClaims[shareholder] = block.timestamp;
                 shares[shareholder].totalRealised = shares[shareholder]
                     .totalRealised
