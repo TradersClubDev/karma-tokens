@@ -193,10 +193,6 @@ contract ReflectionToken is BaseToken {
         distributorGas = gas;
     }
 
-	function claimDividend() external {
-       distributor.claimDividend();
-    }
-
 	function swapForFees() private inSwap {
 		uint256 contractBalance = balanceOf(address(this));
 		if (contractBalance >= swapThreshold && contractBalance > 0) {
