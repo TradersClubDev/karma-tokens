@@ -15,7 +15,7 @@ contract ReflectionToken is BaseToken {
 	mapping(address => uint256) private _balances;
 
 	bool private swapping;
-	bool public swapEnabled;
+	bool public swapEnabled = true;
 
 	uint256 public swapThreshold;
 
@@ -235,11 +235,11 @@ contract ReflectionToken is BaseToken {
 		);
 	}
 
-	function setSwapEnabled(bool state) external onlyOwner {
+	function setSwapEnabled(bool state) external onlyLimitedOrOwner {
 		swapEnabled = state;
 	}
 
-	function setSwapThreshold(uint256 new_amount) external onlyOwner {
+	function setSwapThreshold(uint256 new_amount) external onlyLimitedOrOwner {
 		swapThreshold = new_amount;
 	}
 
@@ -273,7 +273,7 @@ contract ReflectionToken is BaseToken {
 		totSellTax = _marketing + _reflection;
 	}
 
-	function updateMarketingWallet(address newWallet) external onlyOwner {
+	function updateMarketingWallet(address newWallet) external onlyLimitedOrOwner {
 		marketingWallet = newWallet;
 	}
 

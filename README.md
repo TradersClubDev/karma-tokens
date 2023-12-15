@@ -11,4 +11,4 @@
 
 ## Certik Audit Link
 
-pending..
+https://app.thekarmapad.com/assets/REP-final-20231018T151212Z.pdf

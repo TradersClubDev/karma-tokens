@@ -12,7 +12,7 @@ contract StandardToken is BaseToken {
 	mapping(address => uint256) private _balances;
 
 	bool private swapping;
-	bool public swapEnabled;
+	bool public swapEnabled = true;
 
 	uint256 public swapThreshold;
 
@@ -156,11 +156,11 @@ contract StandardToken is BaseToken {
 		);
 	}
 
-	function setSwapEnabled(bool state) external onlyOwner {
+	function setSwapEnabled(bool state) external onlyLimitedOrOwner {
 		swapEnabled = state;
 	}
 
-	function setSwapThreshold(uint256 new_amount) external onlyOwner {
+	function setSwapThreshold(uint256 new_amount) external onlyLimitedOrOwner {
 		swapThreshold = new_amount;
 	}
 
@@ -181,7 +181,7 @@ contract StandardToken is BaseToken {
 		sellTax = _sell;
 	}
 
-	function updateMarketingWallet(address newWallet) external onlyOwner {
+	function updateMarketingWallet(address newWallet) external onlyLimitedOrOwner {
 		marketingWallet = newWallet;
 	}
 
